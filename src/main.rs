@@ -1,9 +1,7 @@
-use anyhow::Ok;
-use anyhow::Result;
+
 use logos::Logos;
 use std::io::{stdin, BufRead};
-use std::str::FromStr;
-use std::{fs, io::BufReader};
+
 
 #[derive(Logos, Debug, PartialEq)]
 enum Token {
@@ -19,6 +17,7 @@ enum Token {
     TInteger,
     #[regex(r"(([0-9]+)[.])\d+")]
     TFloat, // floating points must have a character after the '.'
+    // ex: 34422. == INVALID     34423.0 == VALID
     #[token("%")]
     TModulus,
     #[token("(")]
@@ -35,15 +34,69 @@ enum Token {
     TRbrace,
     #[regex(r#""[^"]*""#)]
     TString,
+    #[token("!")]
+    TBang,
+    #[token("!=")]
+    TBangeq,
+    #[token("<=")]
+    TLesseq,
+    #[token(">=")]
+    TGreatereq,
+    #[token(">")]
+    TGreater,
+    #[token("<")]
+    TLess,
+    #[token("=")]
+    Tassign,
+    #[token("==")]
+    TEqual,
+    #[token("if")]
+    TIf,
+    #[token("while")]
+    TWhile,
+    #[token("for")]
+    TFor,
+    #[token(";")]
+    TExpressiondelimiter,
+    #[token("false")]
+    Tfalse,
+    #[token("true")]
+    Ttrue,
     #[error]
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,
 }
 
+enum Grammar {
+    Expression,
+    Literal,
+    Grouping,
+    Unary,
+    Binary,
+    Operator
+}
+
+struct GrmExpr;
+struct GrmLiteral;
+struct GrmGrouping;
+struct GrmUnary;
+struct GrmBinary {
+    left: GrmExpr,
+    operator: Token,
+    right: GrmExpr
+}
+impl GrmBinary {
+    fn new(l: GrmExpr, op: Token, r: GrmExpr) -> Self {
+        Self { left: l, operator: op, right: r }
+    }
+}
+struct GrmOperator;
+
+
 fn main() {
     for line in stdin().lock().lines() {
         let expression = line.unwrap();
-        let mut lexer = Token::lexer(&expression);
+        let lexer = Token::lexer(&expression);
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
         for token in tokens.iter() {
             print!("{:?} : ", token.0);
