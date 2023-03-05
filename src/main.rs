@@ -1,5 +1,5 @@
 use logos::Logos;
-use std::io::{stdin, BufRead};
+use std::{io::{stdin, BufRead}, ops::BitOr};
 
 #[derive(Logos, Debug, PartialEq)]
 enum Token {
@@ -65,13 +65,13 @@ enum Token {
     ERROR,
 }
 
+
+
 enum Grammar {
-    Expression,
     Literal,
     Grouping,
     Unary,
     Binary,
-    Operator,
     ERROR,
 }
 
@@ -170,6 +170,18 @@ impl GrmOperator {
         }
     }
 }
+
+fn parse(tokens: &Vec<Token>) {
+    let operators: Vec<Token> = tokens.iter().filter(|&&t| match t {
+        Token::TAdd => true,
+        Token::TSubtract => true,
+        Token::TDivide => true,
+        Token::TMultiply => true,
+        _ => false
+    })
+    .collect();
+}
+
 
 fn main() {
     for line in stdin().lock().lines() {
