@@ -73,24 +73,55 @@ enum Grammar {
     Grouping,
     Unary,
     Binary,
-    Operator
+    Operator,
+    ERROR
 }
 
-struct GrmExpr;
+struct GrmExpr {
+    grammar: Grammar
+}
+
+impl GrmExpr {
+    fn new(grm: Grammar) -> Self {
+        match grm {
+            Grammar::Literal => Self { grammar: Grammar::Literal },
+            Grammar::Unary => Self { grammar: Grammar::Unary },
+            Grammar::Binary => Self { grammar: Grammar::Binary },
+            Grammar::Grouping => Self { grammar: Grammar::Grouping },
+            _ => Self { grammar: Grammar::ERROR }
+        }
+    }
+}
+
 struct GrmLiteral;
 struct GrmGrouping;
 struct GrmUnary;
+struct GrmOperator {
+    operator: Token
+}
 struct GrmBinary {
     left: GrmExpr,
-    operator: Token,
+    operator: GrmOperator,
     right: GrmExpr
 }
 impl GrmBinary {
-    fn new(l: GrmExpr, op: Token, r: GrmExpr) -> Self {
+    fn new(l: GrmExpr, op: GrmOperator, r: GrmExpr) -> Self {
         Self { left: l, operator: op, right: r }
     }
 }
-struct GrmOperator;
+
+impl GrmOperator {
+    fn new(op: Token) -> Self {
+        match op {
+            Token::TAdd => Self { operator: Token::TAdd },
+            Token::TSubtract => Self { operator: Token::TSubtract },
+            Token::TDivide => Self { operator: Token::TDivide },
+            Token::TMultiply => Self { operator: Token::TMultiply},
+            _ => Self { operator: Token::ERROR }
+        }
+        
+    }
+}
 
 
 fn main() {
