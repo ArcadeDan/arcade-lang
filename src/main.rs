@@ -1,7 +1,5 @@
-
 use logos::Logos;
 use std::io::{stdin, BufRead};
-
 
 #[derive(Logos, Debug, PartialEq)]
 enum Token {
@@ -74,55 +72,104 @@ enum Grammar {
     Unary,
     Binary,
     Operator,
-    ERROR
+    ERROR,
 }
 
 struct GrmExpr {
-    grammar: Grammar
+    grammar: Grammar,
 }
 
 impl GrmExpr {
     fn new(grm: Grammar) -> Self {
         match grm {
-            Grammar::Literal => Self { grammar: Grammar::Literal },
-            Grammar::Unary => Self { grammar: Grammar::Unary },
-            Grammar::Binary => Self { grammar: Grammar::Binary },
-            Grammar::Grouping => Self { grammar: Grammar::Grouping },
-            _ => Self { grammar: Grammar::ERROR }
+            Grammar::Literal => Self {
+                grammar: Grammar::Literal,
+            },
+            Grammar::Unary => Self {
+                grammar: Grammar::Unary,
+            },
+            Grammar::Binary => Self {
+                grammar: Grammar::Binary,
+            },
+            Grammar::Grouping => Self {
+                grammar: Grammar::Grouping,
+            },
+            _ => Self {
+                grammar: Grammar::ERROR,
+            },
         }
     }
 }
 
-struct GrmLiteral;
+struct GrmLiteral {
+    literal: Token,
+}
+
+impl GrmLiteral {
+    fn new(ltrl: Token) -> Self {
+        match ltrl {
+            Token::TFloat => Self {
+                literal: Token::TFloat,
+            },
+            Token::TInteger => Self {
+                literal: Token::TInteger,
+            },
+            Token::TString => Self {
+                literal: Token::TString,
+            },
+            Token::Ttrue => Self {
+                literal: Token::Ttrue,
+            },
+            Token::Tfalse => Self {
+                literal: Token::Tfalse,
+            },
+            _ => Self {
+                literal: Token::ERROR,
+            },
+        }
+    }
+}
 struct GrmGrouping;
 struct GrmUnary;
 struct GrmOperator {
-    operator: Token
+    operator: Token,
 }
 struct GrmBinary {
     left: GrmExpr,
     operator: GrmOperator,
-    right: GrmExpr
+    right: GrmExpr,
 }
 impl GrmBinary {
     fn new(l: GrmExpr, op: GrmOperator, r: GrmExpr) -> Self {
-        Self { left: l, operator: op, right: r }
+        Self {
+            left: l,
+            operator: op,
+            right: r,
+        }
     }
 }
 
 impl GrmOperator {
     fn new(op: Token) -> Self {
         match op {
-            Token::TAdd => Self { operator: Token::TAdd },
-            Token::TSubtract => Self { operator: Token::TSubtract },
-            Token::TDivide => Self { operator: Token::TDivide },
-            Token::TMultiply => Self { operator: Token::TMultiply},
-            _ => Self { operator: Token::ERROR }
+            Token::TAdd => Self {
+                operator: Token::TAdd,
+            },
+            Token::TSubtract => Self {
+                operator: Token::TSubtract,
+            },
+            Token::TDivide => Self {
+                operator: Token::TDivide,
+            },
+            Token::TMultiply => Self {
+                operator: Token::TMultiply,
+            },
+            _ => Self {
+                operator: Token::ERROR,
+            },
         }
-        
     }
 }
-
 
 fn main() {
     for line in stdin().lock().lines() {
