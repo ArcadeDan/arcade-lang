@@ -1,7 +1,7 @@
 use logos::Logos;
 use std::{io::{stdin, BufRead}, ops::BitOr};
 
-#[derive(Logos, Debug, PartialEq)]
+#[derive(Logos, Debug, PartialEq, Clone)]
 enum Token {
     #[token("+")]
     TAdd,
@@ -171,8 +171,8 @@ impl GrmOperator {
     }
 }
 
-fn parse(tokens: &Vec<Token>) {
-    let operators: Vec<Token> = tokens.iter().filter(|&&t| match t {
+fn parse(tokens: Vec<Token>) {
+    let operators: Vec<Token> = tokens.clone().into_iter().filter(|t| match t {
         Token::TAdd => true,
         Token::TSubtract => true,
         Token::TDivide => true,
@@ -180,6 +180,18 @@ fn parse(tokens: &Vec<Token>) {
         _ => false
     })
     .collect();
+
+    let literals: Vec<Token> = tokens.clone().into_iter().filter(|t| match t {
+        Token::TInteger => true,
+        Token::TString => true,
+        Token::Ttrue => true,
+        Token::Tfalse => true,
+        _ => false
+    })
+    .collect();
+
+
+
 }
 
 
