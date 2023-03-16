@@ -64,9 +64,6 @@ enum Token {
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,
 }
-
-
-
 enum Grammar {
     Literal,
     Grouping,
@@ -129,6 +126,12 @@ impl GrmLiteral {
         }
     }
 }
+
+impl From<Token> for GrmLiteral {
+    fn from(value: Token) -> Self {
+        GrmLiteral { literal: value }
+    }
+}
 struct GrmGrouping;
 struct GrmUnary;
 struct GrmOperator {
@@ -181,13 +184,14 @@ fn parse(tokens: Vec<Token>) {
     })
     .collect();
 
-    let literals: Vec<Token> = tokens.clone().into_iter().filter(|t| match t {
+    let literals: Vec<GrmLiteral> = tokens.clone().into_iter().filter(|t| match t {
         Token::TInteger => true,
         Token::TString => true,
         Token::Ttrue => true,
         Token::Tfalse => true,
         _ => false
     })
+    .map(|x| x.into())
     .collect();
 
 
