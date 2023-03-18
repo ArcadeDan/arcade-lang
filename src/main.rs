@@ -1,5 +1,8 @@
 use logos::Logos;
-use std::{io::{stdin, BufRead}, ops::BitOr};
+use std::{
+    io::{stdin, BufRead},
+    ops::BitOr,
+};
 
 #[derive(Logos, Debug, PartialEq, Clone)]
 enum Token {
@@ -64,6 +67,14 @@ enum Token {
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,
 }
+
+enum TokenType {
+    Number,
+    Operator,
+    SBrace,
+    CBrace,
+}
+
 enum Grammar {
     Literal,
     Grouping,
@@ -72,130 +83,18 @@ enum Grammar {
     ERROR,
 }
 
-struct GrmExpr {
-    grammar: Grammar,
+struct Parser {
+    tokens: Vec<Token>,
+    pos: usize,
 }
 
-impl GrmExpr {
-    fn new(grm: Grammar) -> Self {
-        match grm {
-            Grammar::Literal => Self {
-                grammar: Grammar::Literal,
-            },
-            Grammar::Unary => Self {
-                grammar: Grammar::Unary,
-            },
-            Grammar::Binary => Self {
-                grammar: Grammar::Binary,
-            },
-            Grammar::Grouping => Self {
-                grammar: Grammar::Grouping,
-            },
-            _ => Self {
-                grammar: Grammar::ERROR,
-            },
-        }
-    }
-}
-
-struct GrmLiteral {
-    literal: Token,
-}
-
-impl GrmLiteral {
-    fn new(ltrl: Token) -> Self {
-        match ltrl {
-            Token::TFloat => Self {
-                literal: Token::TFloat,
-            },
-            Token::TInteger => Self {
-                literal: Token::TInteger,
-            },
-            Token::TString => Self {
-                literal: Token::TString,
-            },
-            Token::Ttrue => Self {
-                literal: Token::Ttrue,
-            },
-            Token::Tfalse => Self {
-                literal: Token::Tfalse,
-            },
-            _ => Self {
-                literal: Token::ERROR,
-            },
-        }
-    }
-}
-
-impl From<Token> for GrmLiteral {
-    fn from(value: Token) -> Self {
-        GrmLiteral { literal: value }
-    }
-}
-struct GrmGrouping;
-struct GrmUnary;
-struct GrmOperator {
-    operator: Token,
-}
-struct GrmBinary {
-    left: GrmExpr,
-    operator: GrmOperator,
-    right: GrmExpr,
-}
-impl GrmBinary {
-    fn new(l: GrmExpr, op: GrmOperator, r: GrmExpr) -> Self {
+impl Parser {
+    fn new(tokens: Vec<Token>) -> Self {
         Self {
-            left: l,
-            operator: op,
-            right: r,
+            tokens,
+            pos: 0
         }
     }
-}
-
-impl GrmOperator {
-    fn new(op: Token) -> Self {
-        match op {
-            Token::TAdd => Self {
-                operator: Token::TAdd,
-            },
-            Token::TSubtract => Self {
-                operator: Token::TSubtract,
-            },
-            Token::TDivide => Self {
-                operator: Token::TDivide,
-            },
-            Token::TMultiply => Self {
-                operator: Token::TMultiply,
-            },
-            _ => Self {
-                operator: Token::ERROR,
-            },
-        }
-    }
-}
-
-fn parse(tokens: Vec<Token>) {
-    let operators: Vec<Token> = tokens.clone().into_iter().filter(|t| match t {
-        Token::TAdd => true,
-        Token::TSubtract => true,
-        Token::TDivide => true,
-        Token::TMultiply => true,
-        _ => false
-    })
-    .collect();
-
-    let literals: Vec<GrmLiteral> = tokens.clone().into_iter().filter(|t| match t {
-        Token::TInteger => true,
-        Token::TString => true,
-        Token::Ttrue => true,
-        Token::Tfalse => true,
-        _ => false
-    })
-    .map(|x| x.into())
-    .collect();
-
-
-
 }
 
 
