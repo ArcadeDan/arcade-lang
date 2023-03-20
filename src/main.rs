@@ -68,12 +68,17 @@ enum Token {
     ERROR,
 }
 
+
+#[derive(PartialEq, Eq)]
 enum TokenType {
     Number,
     Operator,
     SBrace,
     CBrace,
 }
+
+
+
 
 enum Grammar {
     Literal,
@@ -95,6 +100,25 @@ impl Parser {
             pos: 0
         }
     }
+
+    fn is_eof(&self) -> bool {
+        self.pos >= self.tokens.len()
+    }
+
+    fn peek(&self, offset: u8) -> &Token {
+        &self.tokens[self.pos + offset]
+    }
+
+    fn current(&self) -> &Token {
+        self.peek(0)
+    }
+
+    fn next_token(&self) -> &Token {
+        self.peek(1)
+    }
+
+    fn is_match(&self, token_type: TokenType) -> bool {
+        !self.is_eof() && self.peek()
 }
 
 
