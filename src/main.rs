@@ -71,7 +71,7 @@ enum Token {
 
 
 #[derive(PartialEq, Eq)]
-enum TokenType {
+enum TokenKind {
 
     // operators
     TKPlus,
@@ -103,11 +103,36 @@ enum TokenType {
     TKGreaterEq,
     TKLess,
     TKLessEq,
-    
+
     // conditionals
     TKIf,
     TKelse
 
+}
+
+impl From<&Token> for TokenKind {
+    fn from(token: &Token) -> Self {
+        match token {
+            Token::TAdd => Self::TKPlus,
+            Token::TSubtract => Self::TKMinus,
+            Token::TMultiply => Self::TKMultiply,
+            Token::TDivide => Self::TKDivide,
+            Token::TModulus => Self::TKModulus,
+            Token::TInteger => Self::TKInteger,
+            Token::TFloat => Self::TKFloat,
+            Token::TIf => Self::TKIf,
+            Token::TWhile => Self::TKWhile,
+            Token::TFor => Self::TKFor,
+            Token::TExpressiondelimiter => Self::TKSemicolon,
+            Token::Tassign => Self::TKBind,
+            Token::TEqual => Self::TKEqual,
+            Token::TGreater => Self::TKGreater,
+            Token::TGreatereq => Self::TKGreaterEq,
+            Token::TLess => Self::TKLess,
+            Token::TLesseq => Self::TKLessEq,
+            _ => {}
+        }
+    }
 }
 
 
@@ -157,21 +182,36 @@ impl Parser {
         todo!()
     }
 
-    fn check
 
-    fn is_match(&self, token_type: TokenType) -> bool {
-        !self.is_eof() && self.peek()
-    
+    fn is_match(&self, token_type: TokenKind) -> bool {
+        todo!()
+        //!self.is_eof() && self.peek()
+    }
 }
 
 
 fn main() {
     
     for line in stdin().lock().lines() {
-        let expression = line.unwrap();
+        let expression = line
+            .unwrap();
+        
         let lexer = Token::lexer(&expression);
-        let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
-        let mut parser = Parser::new(tokens);
+
+
+        // we lex the tokens from standard input and collect them into a vector which 
+        // includes the span of the token
+
+        let tokens: Vec<_> = lexer
+            .spanned()
+            .filter(|x| x.0 != Token::ERROR)
+            .collect();
+        
+        // we then pass the tokens into the parser, but this time we only pass the token and not the ranges
+        let mut parser = Parser::new(tokens
+            .iter()
+            .map(|x| x.0.clone())
+            .collect());
         
         for token in tokens.iter() {
             print!("{:?} : ", token.0);
