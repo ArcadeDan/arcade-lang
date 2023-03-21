@@ -106,25 +106,38 @@ impl Parser {
         self.pos >= self.tokens.len()
     }
 
-    pub fn peek(&self, offset: usize) -> &Token {
-        &self.tokens[self.pos + offset].0
+    pub fn peek(&self, offset: usize) -> &(Token, Range<usize>) {
+        &self.tokens[self.pos + offset]
         
     }
 
     pub fn check(&self, match_token: TokenKind) -> bool {
         let token = self.peek(1);
-        token.clone() == match_token.into()
+        token.clone().0 == match_token.into()
     }
 
-    fn current(&self) -> &Token {
+    fn current(&self) -> &(Token, Range<usize>) {
         self.peek(0)
     }
 
-    fn next_token(&mut self) -> &Token {
+    fn next_token(&mut self) -> &(Token, Range<usize>) {
         self.pos += 1;
         self.peek(1)
     }
 
+    fn previous(&self) -> &(Token, Range<usize>) {
+        let token = self.tokens.get(self.pos - 1).unwrap();
+        token
+    }
+
+    fn advance(&mut self) -> &(Token, Range<usize>) {
+        if !self.is_eof() {
+            self.next_token()
+        } else {
+            self.previous()
+        }
+        
+    }
    
 
     fn expression() {

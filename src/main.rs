@@ -26,7 +26,6 @@ fn main() {
         // includes the span of the token
 
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
-        // we then pass the tokens into the parser, but this time we only pass the token and not the ranges
         let mut parser = Parser::new(&tokens);
 
         for token in tokens.clone().iter() {
@@ -50,6 +49,6 @@ mod tests {
             Token::TRparen,
         ];
 
-        let parser = parser::Parser::new(tokens);
+        let parser = parser::Parser::new(tokens.);
     }
 }
