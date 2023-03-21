@@ -3,7 +3,7 @@ use std::ops::Range;
 use crate::lexer::Token;
 
 #[derive(PartialEq, Eq)]
-enum TokenKind {
+pub enum TokenKind {
     // operators
     TKPlus,
     TKMinus,
@@ -31,12 +31,20 @@ enum TokenKind {
     TKGreaterEq,
     TKLess,
     TKLessEq,
+    TKBangEqual,
+    TKBang,
 
     // conditionals
     TKIf,
     TKelse,
     TKWhile,
     TKFor,
+
+    // structure
+    TKLeftBracket,
+    TKLeftBrace,
+    TKLeftParan,
+    TKDot
 
     // misc
     TKERROR,
@@ -67,6 +75,35 @@ impl From<TokenKind> for Token {
     }
 }
 
+impl Into<TokenKind> for Token {
+    fn into(self) ->  TokenKind {
+        match self {
+            Self::TAdd => TokenKind::TKPlus,
+            Self::TSubtract => TokenKind::TKMinus,
+            Self::TMultiply => TokenKind::TKMultiply,
+            Self::TDivide => TokenKind::TKDivide,
+            Self::TModulus => TokenKind::TKModulus,
+            Self::TInteger => TokenKind::TKInteger,
+            Self::TFloat => TokenKind::TKFloat,
+            Self::TIf => TokenKind::TKIf,
+            Self::TWhile => TokenKind::TKWhile,
+            Self::TFor => TokenKind::TKFor,
+            Self::TExpressiondelimiter => TokenKind::TKSemicolon,
+            Self::Tassign => TokenKind::TKBind,
+            Self::TEqual => TokenKind::TKEqual,
+            Self::TGreater => TokenKind::TKGreater,
+            Self::TGreatereq => TokenKind::TKGreaterEq,
+            Self::TLess => TokenKind::TKLess,
+            Self::TLesseq => TokenKind::TKLessEq,
+            _ => TokenKind::TKERROR,
+        }
+    }
+        
+    
+    
+    
+}
+
 impl From<&Token> for TokenKind {
     fn from(token: &Token) -> Self {
         match token {
@@ -91,6 +128,10 @@ impl From<&Token> for TokenKind {
         }
     }
 }
+
+
+
+
 
 pub struct Parser {
     tokens: Vec<(Token, Range<usize>)>,
@@ -138,13 +179,18 @@ impl Parser {
         }
         
     }
+    
+
+    fn is_match(&mut self, token_type: Vec<(Token, Range<usize>)>) -> bool {
+        for token in token_type {
+            if self.check(token.0.into()) {
+                self.advance();
+                return true;
+            }
+        }
+        false
+    }
+
    
 
-    fn expression() {
-        todo!()
-    }
-
-    fn is_match(&self, token_type: TokenKind) -> bool {
-        todo!()
-    }
 }
