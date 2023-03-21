@@ -20,18 +20,16 @@ enum Grammar {
 fn main() {
     for line in stdin().lock().lines() {
         let expression = line.unwrap();
-
         let lexer = Token::lexer(&expression);
 
         // we lex the tokens from standard input and collect them into a vector which
         // includes the span of the token
 
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
-
         // we then pass the tokens into the parser, but this time we only pass the token and not the ranges
-        let mut parser = Parser::new(tokens.iter().map(|x| x.0.clone()).collect());
+        let mut parser = Parser::new(&tokens);
 
-        for token in tokens.iter() {
+        for token in tokens.clone().iter() {
             print!("{:?} : ", token.0);
         }
         println!("\n");
@@ -39,11 +37,19 @@ fn main() {
 }
 #[cfg(test)]
 mod tests {
-    use crate::Token;
+    use crate::{parser, Token};
     use logos::Logos;
 
     #[test]
-    fn negative_b() {
-        todo!()
+    fn test_parse_expr() {
+        let tokens: Vec<Token> = vec![
+            Token::TLparen,
+            Token::TInteger,
+            Token::TAdd,
+            Token::TInteger,
+            Token::TRparen,
+        ];
+
+        let parser = parser::Parser::new(tokens);
     }
 }

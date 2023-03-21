@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use crate::lexer::Token;
 
 #[derive(PartialEq, Eq)]
@@ -91,13 +93,13 @@ impl From<&Token> for TokenKind {
 }
 
 pub struct Parser {
-    tokens: Vec<Token>,
+    tokens: Vec<(Token, Range<usize>)>,
     pos: usize,
 }
 
 impl Parser {
-    pub fn new(tokens: Vec<Token>) -> Self {
-        Self { tokens, pos: 0 }
+    pub fn new(tokens: &Vec<(Token, Range<usize>)>) -> Self {
+        Self { tokens: tokens.to_vec(), pos: 0 }
     }
 
     pub fn is_eof(&self) -> bool {
@@ -105,7 +107,8 @@ impl Parser {
     }
 
     pub fn peek(&self, offset: usize) -> &Token {
-        &self.tokens[self.pos + offset]
+        &self.tokens[self.pos + offset].0
+        
     }
 
     pub fn check(&self, match_token: TokenKind) -> bool {
@@ -113,7 +116,7 @@ impl Parser {
         token.clone() == match_token.into()
     }
 
-    pub fn current(&self) -> &Token {
+    fn current(&self) -> &Token {
         self.peek(0)
     }
 
@@ -121,6 +124,8 @@ impl Parser {
         self.pos += 1;
         self.peek(1)
     }
+
+   
 
     fn expression() {
         todo!()
