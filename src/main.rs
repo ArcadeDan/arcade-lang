@@ -85,9 +85,6 @@ enum TokenKind {
     TKFloat,
 
     // keywords
-    TKIf,
-    TKWhile,
-    TKFor,
     TKSemicolon,
     TKBind,
     TKReturn,
@@ -106,7 +103,12 @@ enum TokenKind {
 
     // conditionals
     TKIf,
-    TKelse
+    TKelse,
+    TKWhile,
+    TKFor,
+
+    // misc
+    TKERROR
 
 }
 
@@ -130,7 +132,7 @@ impl From<&Token> for TokenKind {
             Token::TGreatereq => Self::TKGreaterEq,
             Token::TLess => Self::TKLess,
             Token::TLesseq => Self::TKLessEq,
-            _ => {}
+            _ => Self::TKERROR,
         }
     }
 }
@@ -172,7 +174,7 @@ impl Parser {
         self.peek(0)
     }
 
-    fn next_token(&self) -> &Token {
+    fn next_token(&mut self) -> &Token {
         self.pos += 1;
         self.peek(1)
         
@@ -185,7 +187,6 @@ impl Parser {
 
     fn is_match(&self, token_type: TokenKind) -> bool {
         todo!()
-        //!self.is_eof() && self.peek()
     }
 }
 
