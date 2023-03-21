@@ -69,15 +69,46 @@ enum Token {
 }
 
 
+
 #[derive(PartialEq, Eq)]
 enum TokenType {
-    Number,
-    Operator,
-    SBrace,
-    CBrace,
+
+    // operators
+    TKPlus,
+    TKMinus,
+    TKMultiply,
+    TKDivide,
+    TKModulus,
+
+    // integrals
+    TKInteger,
+    TKFloat,
+
+    // keywords
+    TKIf,
+    TKWhile,
+    TKFor,
+    TKSemicolon,
+    TKBind,
+    TKReturn,
+
+    // boolean logic
+    TKAnd,
+    TKOr,
+    TKNot,
+
+    // comparison
+    TKEqual,
+    TKGreater,
+    TKGreaterEq,
+    TKLess,
+    TKLessEq,
+    
+    // conditionals
+    TKIf,
+    TKelse
+
 }
-
-
 
 
 enum Grammar {
@@ -87,6 +118,9 @@ enum Grammar {
     Binary,
     ERROR,
 }
+
+
+
 
 struct Parser {
     tokens: Vec<Token>,
@@ -105,7 +139,7 @@ impl Parser {
         self.pos >= self.tokens.len()
     }
 
-    fn peek(&self, offset: u8) -> &Token {
+    fn peek(&self, offset: usize) -> &Token {
         &self.tokens[self.pos + offset]
     }
 
@@ -114,19 +148,31 @@ impl Parser {
     }
 
     fn next_token(&self) -> &Token {
+        self.pos += 1;
         self.peek(1)
+        
     }
+    
+    fn expression() {
+        todo!()
+    }
+
+    fn check
 
     fn is_match(&self, token_type: TokenType) -> bool {
         !self.is_eof() && self.peek()
+    
 }
 
 
 fn main() {
+    
     for line in stdin().lock().lines() {
         let expression = line.unwrap();
         let lexer = Token::lexer(&expression);
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
+        let mut parser = Parser::new(tokens);
+        
         for token in tokens.iter() {
             print!("{:?} : ", token.0);
         }
