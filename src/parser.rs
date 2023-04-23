@@ -44,7 +44,7 @@ pub enum TokenKind {
     TKLeftBracket,
     TKLeftBrace,
     TKLeftParan,
-    TKDot
+    TKDot,
 
     // misc
     TKERROR,
@@ -76,7 +76,7 @@ impl From<TokenKind> for Token {
 }
 
 impl Into<TokenKind> for Token {
-    fn into(self) ->  TokenKind {
+    fn into(self) -> TokenKind {
         match self {
             Self::TAdd => TokenKind::TKPlus,
             Self::TSubtract => TokenKind::TKMinus,
@@ -98,10 +98,6 @@ impl Into<TokenKind> for Token {
             _ => TokenKind::TKERROR,
         }
     }
-        
-    
-    
-    
 }
 
 impl From<&Token> for TokenKind {
@@ -128,11 +124,7 @@ impl From<&Token> for TokenKind {
         }
     }
 }
-
-
-
-
-
+#[derive(Debug)]
 pub struct Parser {
     tokens: Vec<(Token, Range<usize>)>,
     pos: usize,
@@ -140,7 +132,10 @@ pub struct Parser {
 
 impl Parser {
     pub fn new(tokens: &Vec<(Token, Range<usize>)>) -> Self {
-        Self { tokens: tokens.to_vec(), pos: 0 }
+        Self {
+            tokens: tokens.to_vec(),
+            pos: 0,
+        }
     }
 
     pub fn is_eof(&self) -> bool {
@@ -149,7 +144,6 @@ impl Parser {
 
     pub fn peek(&self, offset: usize) -> &(Token, Range<usize>) {
         &self.tokens[self.pos + offset]
-        
     }
 
     pub fn check(&self, match_token: TokenKind) -> bool {
@@ -177,9 +171,7 @@ impl Parser {
         } else {
             self.previous()
         }
-        
     }
-    
 
     fn is_match(&mut self, token_type: Vec<(Token, Range<usize>)>) -> bool {
         for token in token_type {
@@ -190,7 +182,4 @@ impl Parser {
         }
         false
     }
-
-   
-
 }

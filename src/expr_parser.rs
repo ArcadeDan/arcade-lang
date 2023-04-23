@@ -1,6 +1,5 @@
 use crate::parser::TokenKind;
 
-
 enum Precedence {
     None,
     Assign,
@@ -13,7 +12,7 @@ enum Precedence {
     Unary,
     Call,
     List,
-    Primary
+    Primary,
 }
 
 impl From<TokenKind> for Precedence {
@@ -24,16 +23,16 @@ impl From<TokenKind> for Precedence {
             TokenKind::TKAnd => Precedence::And,
             TokenKind::TKBangEqual | TokenKind::TKEqual => Precedence::Equality,
             TokenKind::TKLess
-                | TokenKind::TKLessEq
-                | TokenKind::TKGreater
-                | TokenKind::TKGreaterEq => Precedence::Comparison,
+            | TokenKind::TKLessEq
+            | TokenKind::TKGreater
+            | TokenKind::TKGreaterEq => Precedence::Comparison,
             TokenKind::TKPlus | TokenKind::TKMinus => Precedence::Term,
             TokenKind::TKMultiply | TokenKind::TKDivide => Precedence::Factor,
             TokenKind::TKBang => Precedence::Unary,
             TokenKind::TKLeftParan => Precedence::Call,
             TokenKind::TKDot => Precedence::Call,
-            TokenKind::TKLeftBracket => Precedence::List
-            _ => Precedence::None
+            TokenKind::TKLeftBracket => Precedence::List,
+            _ => Precedence::None,
         }
     }
 }
