@@ -151,21 +151,21 @@ impl Parser {
         token.clone().0 == match_token.into()
     }
 
-    fn current(&self) -> &(Token, Range<usize>) {
+    pub fn current(&self) -> &(Token, Range<usize>) {
         self.peek(0)
     }
 
-    fn next_token(&mut self) -> &(Token, Range<usize>) {
+    pub fn next_token(&mut self) -> &(Token, Range<usize>) {
         self.pos += 1;
         self.peek(1)
     }
 
-    fn previous(&self) -> &(Token, Range<usize>) {
+    pub fn previous(&self) -> &(Token, Range<usize>) {
         let token = self.tokens.get(self.pos - 1).unwrap();
         token
     }
 
-    fn advance(&mut self) -> &(Token, Range<usize>) {
+    pub fn advance(&mut self) -> &(Token, Range<usize>) {
         if !self.is_eof() {
             self.next_token()
         } else {
@@ -173,7 +173,7 @@ impl Parser {
         }
     }
 
-    fn is_match(&mut self, token_type: Vec<(Token, Range<usize>)>) -> bool {
+    pub fn is_match(&mut self, token_type: Vec<(Token, Range<usize>)>) -> bool {
         for token in token_type {
             if self.check(token.0.into()) {
                 self.advance();
