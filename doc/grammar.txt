@@ -1,0 +1,31 @@
+Operation:
+        ->           + | - | / | *
+
+Expression:
+        ->           ( Expression )
+        ->           Number
+        ->           Expression Operation Expression
+        ->           Expression Operation Number | Number Operation Expression | Number Operation Number
+        ->           Term
+        ->           Expression + Term
+        ->           Expression - Term
+Number:
+        ->           Integer | Float
+
+Factor:
+        ->           Number
+        ->           ( Expression )
+
+Term:
+        ->           Factor
+        ->           Term * Factor
+        ->           Term / Factor
+
+String:
+        ->           ' String '
+
+
+
+
+
+
