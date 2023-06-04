@@ -1,7 +1,7 @@
 use logos::Logos;
-use std::io::{stdin, BufRead};
+use std::{io::{stdin, BufRead}, ops::Range};
 
-use crate::{lexer::Token};
+use crate::{lexer::{Token, TokenType}};
 
 mod lexer;
 
@@ -14,11 +14,16 @@ fn main() {
         // we lex the tokens from standard input and collect them into a vector which
         // includes the span of the token
 
-        let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
+        let terminals: Vec<(Token, Range<usize>)> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
+        let mut tokens: Vec<TokenType> = Vec::new();
+        for token in terminals.iter() {
+            let t = TokenType::new(token.0, token.1.clone());
+            tokens.push(t);
+        }
         //let mut parser = Parser::new(&tokens);
         
         for token in tokens.iter() {
-            print!("{:?} : ", token.0);
+            print!("{:?} : ", token.tokentype);
         }
         println!("\n");
     }

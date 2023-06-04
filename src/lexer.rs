@@ -1,6 +1,6 @@
 use logos::Logos;
 
-#[derive(Logos, Debug, PartialEq, Clone)]
+#[derive(Logos, Debug, PartialEq, Clone, Copy)]
 pub enum Token {
     #[token("+")]
     PLUS,
@@ -33,8 +33,6 @@ pub enum Token {
     LESSER,
     #[token("=")]
     EQUAL,
-    #[token("==")]
-    EQUAL_COMPARISON,
     #[token(";")]
     DELMITTER,
     #[token("false")]
@@ -47,12 +45,12 @@ pub enum Token {
 }
 #[derive(Debug, Clone)]
 pub struct TokenType {
-    token: Token,
-    span: std::ops::Range<usize>,
+    pub tokentype: Token,
+    pub span: std::ops::Range<usize>,
 }
 
 impl TokenType {
-    pub fn new(token: Token, span: std::ops::Range<usize>) -> Self {
-        Self { token, span }
+    pub fn new(tokentype: Token, span: std::ops::Range<usize>) -> Self {
+        Self { tokentype, span }
     }
 }
