@@ -43,7 +43,7 @@ pub enum Token {
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,
 }
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct TokenType {
     pub tokentype: Token,
     pub span: std::ops::Range<usize>,

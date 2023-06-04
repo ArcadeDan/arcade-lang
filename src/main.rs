@@ -4,7 +4,10 @@ use std::{
     ops::Range,
 };
 
-use crate::lexer::{Token, TokenType};
+use crate::{
+    lexer::{Token, TokenType},
+    parser::Parser,
+};
 
 mod lexer;
 mod parser;
@@ -24,7 +27,7 @@ fn main() {
             let t = TokenType::new(token.0, token.1.clone());
             tokens.push(t);
         }
-        //let mut parser = Parser::new(&tokens);
+        let mut parser = Parser::new(&tokens);
 
         for token in tokens.iter() {
             print!("{:?} : ", token.tokentype);

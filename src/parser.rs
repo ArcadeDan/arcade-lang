@@ -12,7 +12,43 @@ impl Parser {
             current: 0,
         }
     }
-    pub fn z
+
+    pub fn cursor(&self) -> usize {
+        self.current
+    }
+    pub fn advance(&mut self) -> TokenType {
+        if !self.is_at_end() {
+            self.current += 1;
+        }
+        self.previous()
+    }
+    pub fn is_at_end(&self) -> bool {
+        self.current >= self.tokens.len()
+    }
+    pub fn previous(&self) -> TokenType {
+        self.tokens.get(self.current - 1).unwrap().clone()
+    }
+    pub fn peek(&self) -> TokenType {
+        self.tokens.get(self.current).unwrap().clone()
+    }
+    pub fn peek_next(&self) -> TokenType {
+        self.tokens.get(self.current + 1).unwrap().clone()
+    }
+    //checks if the next token is the same as the one passed in
+    pub fn check(&self, token: TokenType) -> bool {
+        if self.is_at_end() {
+            return false;
+        }
+        self.peek() == token
+    }
+    pub fn match_token(&mut self, token: TokenType) -> bool {
+        if self.check(token.clone()) {
+            self.advance();
+            return true;
+        }
+        false
+    }
+    
+
 
 }
-
