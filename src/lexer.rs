@@ -3,62 +3,44 @@ use logos::Logos;
 #[derive(Logos, Debug, PartialEq, Clone)]
 pub enum Token {
     #[token("+")]
-    TAdd,
+    PLUS,
     #[token("-")]
-    TSubtract,
+    MINUS,
     #[token("*")]
-    TMultiply,
+    MULT,
     #[token("/")]
-    TDivide,
+    DIV,
     #[regex(r"[0-9]+")]
-    TInteger,
+    INTEGER,
     #[regex(r"(([0-9]+)[.])\d+")]
-    TFloat, // floating points must have a character after the '.'
+    FLOAT, // floating points must have a character after the '.'
     // ex: 34422. == INVALID     34423.0 == VALID
     #[token("%")]
-    TModulus,
-    #[token("(")]
-    TLparen,
-    #[token(")")]
-    TRparen,
-    #[token("[")]
-    TLbrack,
-    #[token("]")]
-    TRbrack,
-    #[token("{")]
-    TLbrace,
-    #[token("}")]
-    TRbrace,
+    MOD,
     #[regex(r#""[^"]*""#)]
-    TString,
+    STRING,
     #[token("!")]
-    TBang,
+    BANG,
     #[token("!=")]
-    TBangeq,
+    BANG_EQUAL,
     #[token("<=")]
-    TLesseq,
+    LESS_EQUAL,
     #[token(">=")]
-    TGreatereq,
+    GREATER_EQUAL,
     #[token(">")]
-    TGreater,
+    GREATER,
     #[token("<")]
-    TLess,
+    LESSER,
     #[token("=")]
-    Tassign,
+    EQUAL,
     #[token("==")]
-    TEqual,
-    #[token("if")]
-    TIf,
-    #[token("while")]
-    TWhile,
-    #[token("for")]
-    TFor,
+    EQUAL_COMPARISON,
     #[token(";")]
-    TExpressiondelimiter,
+    DELMITTER,
     #[token("false")]
-    Tfalse,
+    FALSE,
     #[token("true")]
-    Ttrue,
+    TRUE,
     #[error]
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,

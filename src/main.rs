@@ -34,9 +34,9 @@ mod tests {
         let lexer = Token::lexer(expression);
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
 
-        assert_eq!(Token::TInteger, tokens.get(0).unwrap().0);
-        assert_eq!(Token::TAdd, tokens.get(1).unwrap().0);
-        assert_eq!(Token::TInteger, tokens.get(2).unwrap().0);
+        assert_eq!(Token::INTEGER, tokens.get(0).unwrap().0);
+        assert_eq!(Token::PLUS, tokens.get(1).unwrap().0);
+        assert_eq!(Token::INTEGER, tokens.get(2).unwrap().0);
 
     }
 }
