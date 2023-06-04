@@ -63,3 +63,14 @@ pub enum Token {
     #[regex(r"[\t\n\f]+", logos::skip)]
     ERROR,
 }
+#[derive(Debug, Clone)]
+pub struct TokenType {
+    token: Token,
+    span: std::ops::Range<usize>,
+}
+
+impl TokenType {
+    pub fn new(token: Token, span: std::ops::Range<usize>) -> Self {
+        Self { token, span }
+    }
+}

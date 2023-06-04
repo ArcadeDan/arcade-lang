@@ -1,21 +1,10 @@
 use logos::Logos;
 use std::io::{stdin, BufRead};
 
-use crate::{lexer::Token, parser::Parser};
+use crate::{lexer::Token};
 
-mod expr_parser;
 mod lexer;
-mod parser;
-/*
 
-enum Grammar {
-    Literal,
-    Grouping,
-    Unary,
-    Binary,
-    ERROR,
-}
-*/
 
 fn main() {
     for line in stdin().lock().lines() {
@@ -26,9 +15,9 @@ fn main() {
         // includes the span of the token
 
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
-        let mut parser = Parser::new(&tokens);
+        //let mut parser = Parser::new(&tokens);
         
-        for token in tokens.clone().iter() {
+        for token in tokens.iter() {
             print!("{:?} : ", token.0);
         }
         println!("\n");
@@ -36,7 +25,7 @@ fn main() {
 }
 #[cfg(test)]
 mod tests {
-    use crate::{parser, Token, lexer};
+    use crate::{Token, lexer};
     use logos::Logos;
 
     #[test]
