@@ -1,21 +1,16 @@
 use logos::Logos;
-use std::io::{stdin, BufRead};
+use std::{
+    io::{stdin, BufRead},
+    ops::Range,
+};
 
-use crate::{lexer::Token, parser::Parser};
+use crate::{
+    lexer::{Token, TokenType},
+    parser::Parser,
+};
 
-mod expr_parser;
 mod lexer;
 mod parser;
-/*
-
-enum Grammar {
-    Literal,
-    Grouping,
-    Unary,
-    Binary,
-    ERROR,
-}
-*/
 
 fn main() {
     for line in stdin().lock().lines() {
@@ -25,18 +20,24 @@ fn main() {
         // we lex the tokens from standard input and collect them into a vector which
         // includes the span of the token
 
-        let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
+        let terminals: Vec<(Token, Range<usize>)> =
+            lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
+        let mut tokens: Vec<TokenType> = Vec::new();
+        for token in terminals.iter() {
+            let t = TokenType::new(token.0, token.1.clone());
+            tokens.push(t);
+        }
         let mut parser = Parser::new(&tokens);
-        
-        for token in tokens.clone().iter() {
-            print!("{:?} : ", token.0);
+
+        for token in tokens.iter() {
+            print!("{:?} : ", token.tokentype);
         }
         println!("\n");
     }
 }
 #[cfg(test)]
 mod tests {
-    use crate::{parser, Token, lexer};
+    use crate::{lexer, Token};
     use logos::Logos;
 
     #[test]
@@ -45,9 +46,8 @@ mod tests {
         let lexer = Token::lexer(expression);
         let tokens: Vec<_> = lexer.spanned().filter(|x| x.0 != Token::ERROR).collect();
 
-        assert_eq!(Token::TInteger, tokens.get(0).unwrap().0);
-        assert_eq!(Token::TAdd, tokens.get(1).unwrap().0);
-        assert_eq!(Token::TInteger, tokens.get(2).unwrap().0);
-
+        assert_eq!(Token::INTEGER, tokens.get(0).unwrap().0);
+        assert_eq!(Token::PLUS, tokens.get(1).unwrap().0);
+        assert_eq!(Token::INTEGER, tokens.get(2).unwrap().0);
     }
 }
