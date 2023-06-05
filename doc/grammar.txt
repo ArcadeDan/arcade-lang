@@ -22,7 +22,7 @@ Term:
         ->           Term / Factor
 
 String:
-        ->           ' String '
+        ->           "String"
 
 
 

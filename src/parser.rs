@@ -48,7 +48,42 @@ impl Parser {
         }
         false
     }
-    
+    /*
+    pub fn consume(&mut self, token: TokenType, message: &str) {
+        if self.check(token.clone()) {
+            self.advance();
+        } else {
+            panic!("{}", message);
+        }
+    }
+    */
 
+    
+}
+
+struct ASTNode {
+    token: TokenType,
+    children: Vec<ASTNode>,
+}
+
+impl ASTNode {
+    fn new(token: TokenType) -> Self {
+        Self {
+            token,
+            children: Vec::new(),
+        }
+    }
 
 }
+
+struct AST {
+    root: ASTNode,
+}
+
+impl AST {
+    fn new(root: ASTNode) -> Self {
+        Self { root }
+    }
+}
+
+
